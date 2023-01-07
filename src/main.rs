@@ -21,7 +21,7 @@ use ruma::{
         sync::sync_events,
     },
     assign,
-    events::{room::message::RoomMessageEventContent, AnySyncRoomEvent, AnySyncStateEvent},
+    events::{room::message::RoomMessageEventContent, AnySyncTimelineEvent, AnySyncStateEvent},
     TransactionId,
 };
 
@@ -73,8 +73,8 @@ async fn main() -> eyre::Result<()> {
                 .into_iter()
                 .flat_map(|r| r.deserialize())
             {
-                if let AnySyncRoomEvent::State(AnySyncStateEvent::RoomMember(change)) = &event {
-                    let _membership_change = change.membership_change();
+                if let AnySyncTimelineEvent::State(AnySyncStateEvent::RoomMember(change)) = &event {
+                    let _membership_change = change.membership();
                     let sender = event.sender();
                     println!("{} triggered a join event", event.sender());
                     let new_members = client
